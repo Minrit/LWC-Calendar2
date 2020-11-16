@@ -1,0 +1,156 @@
+/*  */
+.calendarHead {
+    border: 1px solid #dddbda;
+    background-color: #fafaf9;
+}
+.calendarContainer {
+    background-color: white;
+}
+
+.calendarCell {
+    position: relative;
+    overflow-y: auto;
+}
+
+.dateCell {
+    height: 150px;
+    border: 1px solid #dddbda;
+    position: relative;
+    position: sticky;
+    top: 0;
+    /* padding-bottom: 5%; */
+}
+
+.eventModalContainer {
+    /* height: 200px; */
+    width: 14%;
+    position: absolute;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgb(228, 228, 228);
+    box-shadow: 0px 0px 2px 1px rgb(233, 233, 233);
+}
+.calendarCellEventText {
+    background-color: #ecebea;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px 1px rgb(245, 245, 245);
+}
+.calendarCellEventTextMulti {
+    background-color: rgb(216, 216, 216);
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px 1px rgb(233, 233, 233);
+}
+.calendarCellEventTextMulti:hover {
+    background-color: rgb(167, 167, 167);
+}
+.calendarCellEventText:hover {
+    background-color: rgb(199, 199, 199);
+}
+
+.calendarCellEventStyle {
+    /* padding-bottom:75%; */
+    height: 95px;
+}
+
+.monthNowText {
+    color: #194482;
+}
+.monthNowText:hover {
+    color: #7d92b1;
+    cursor: pointer;
+}
+
+.yearNowText {
+    color: #194482;
+}
+.yearNowText:hover {
+    color: #7d92b1;
+    cursor: pointer;
+}
+
+.monthYearChooseContainer {
+    /* position: absolute; */
+    background-color: aqua;
+}
+.cv-item {
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #f7f7f7;
+    border-width: 1px;
+    /* Restore user's direction setting (overridden for week) */
+    direction: initial;
+}
+
+.cv-item {
+    border-style: solid;
+    border-color: #ddd;
+}
+
+.cv-item {
+    padding: 0.2em;
+}
+
+.cv-item.offset0 {
+    left: 0;
+}
+
+.cv-item.offset1 {
+    left: calc((100% / 7));
+}
+
+.cv-item.offset2 {
+    left: calc((200% / 7));
+}
+
+.cv-item.offset3 {
+    left: calc((300% / 7));
+}
+
+.cv-item.offset4 {
+    left: calc((400% / 7));
+}
+
+.cv-item.offset5 {
+    left: calc((500% / 7));
+}
+
+.cv-item.offset6 {
+    left: calc((600% / 7));
+}
+
+.cv-item.span1 {
+    width: calc((100% / 7) - 0.75em);
+}
+
+.cv-item.span2 {
+    width: calc((200% / 7) - 0.75em);
+}
+
+.cv-item.span3 {
+    width: calc((300% / 7) - 0.75em);
+}
+
+.cv-item.span4 {
+    width: calc((400% / 7) - 0.75em);
+}
+
+.cv-item.span5 {
+    width: calc((500% / 7) - 0.75em);
+}
+
+.cv-item.span6 {
+    width: calc((600% / 7) - 0.75em);
+}
+
+.cv-item.span7 {
+    width: calc((700% / 7) - 0.75em);
+}
+
+::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+}

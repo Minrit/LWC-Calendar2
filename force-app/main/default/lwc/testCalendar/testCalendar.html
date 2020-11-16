@@ -1,0 +1,15 @@
+<template>
+  <!-- <div style="width: 200px;background-color:white;" class="slds-grid slds-grid_align-center">
+        
+        <c-mini-calendar></c-mini-calendar>
+    </div> -->
+  <div class="slds-col slds-size_11-of-12 slds-p-around_x-small" style="background-color: white;">
+    <c-calendar2
+      ongeteventlist={getEventListHandler}
+      ondeleteevent={deleteEventHandler}
+      oneditevent={editEventHandler}
+      onnewevent={newEventHandler}
+      origin-event-list={eventList}
+    ></c-calendar2>
+  </div>
+</template>
