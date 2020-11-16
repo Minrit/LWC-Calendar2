@@ -176,6 +176,47 @@ export default class Calendar2 extends LightningElement {
         this.reduceOtherDayOpactiy();
         this.highlightToday();
     }
+    handleDragStart(e) {
+        this.eventId = e.target.dataset.id;
+    }
+    handleDrop(e) {
+        e.currentTarget.classList.remove('drag-hover');
+        if (e.currentTarget.dataset.datestring) {
+            let originEvent;
+            const eventLength = this.eventList.length;
+            for (let i = 0; i < eventLength; i++) {
+                if (this.eventList[i].id === this.eventId) {
+                    originEvent = this.eventList[i];
+                    break;
+                }
+            }
+            const targetDate = new Date(e.currentTarget.dataset.datestring);
+            const dateDiff = this.dayDiff(originEvent.startDate, targetDate);
+            let newEvent = {
+                id: originEvent.id,
+                title: originEvent.title,
+                description: originEvent.description,
+                startDate: this.addDays(originEvent.startDate, dateDiff),
+                endDate: this.addDays(originEvent.endDate, dateDiff)
+            };
+            const event = new CustomEvent("editevent", {
+                detail: newEvent
+            });
+            this.dispatchEvent(event);
+            this.deleteEventByEventId();
+            this.eventList.push(newEvent);
+            this.refreshCalendar();
+        }
+    }
+    handleDragOver(e) {
+        e.preventDefault();
+    }
+    handleDragEnter(e){
+        e.currentTarget.classList.add('drag-hover');
+    }
+    handleDragLeave(e){
+        e.currentTarget.classList.remove('drag-hover');
+    }
     saveNewEvent() {
         let inputStartDateStatus = JSON.stringify(
             this.template.querySelector(".inputStartDate").value
@@ -193,7 +234,7 @@ export default class Calendar2 extends LightningElement {
         for (let i = 0; i < 6; i++) {
             randomNum += Math.floor(Math.random() * 10);
         }
-        let eventId = new Date(inputStartDate).getMilliseconds() + randomNum;
+        let eventId = Number(new Date(inputStartDate)) + randomNum;
         if (
             inputEvent.replace(/(^s*)|(s*$)/g, "").length !== 0 &&
             inputStartDateStatus !== "null" &&
@@ -233,7 +274,6 @@ export default class Calendar2 extends LightningElement {
         this.titleTemp = evt.target.title;
         this.descriptionTemp = evt.target.dataset.description;
         this.eventId = evt.target.dataset.id;
-        this.eventType = evt.target.dataset.type;
         this.dateStartTemp = evt.target.dataset.datestart;
         this.dateEndTemp = evt.target.dataset.dateend;
         this.toShowDetailModal();

@@ -8,8 +8,9 @@ This is a LWC calendar component implementation without any third-party JS libra
 2. Creating event.
 3. Editing event.
 4. Support multi-day event.
-5. Lightning design system style.
-6. No third-party JS Library.
+5. Drag and drop.
+6. Lightning design system style.
+7. No third-party JS Library.
 
 ## How to use
 

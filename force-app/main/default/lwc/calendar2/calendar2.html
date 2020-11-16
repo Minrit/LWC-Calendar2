@@ -50,20 +50,20 @@
                 </div>
                 <div class="slds-col slds-grid slds-grid_vertical slds-scrollable">
                     <template for:each={calendarData} for:item="item">
-                        <div key={item.index} class="slds-col slds-grid calendarCell">
+                        <div key={item.index} class="slds-col slds-grid calendarCell" >
                             <template for:each={item.items} for:item="childItem">
                                 <div key={childItem.label}
-                                    class="slds-col slds-size_1-of-7 slds-grid slds-grid_vertical dateCell"
-                                    data-datestring={childItem.dateString} onclick={dateTileClickHandler}>
-                                    <div data-datestatus={childItem.status} class="slds-text-heading_small">
+                                    class="slds-col slds-size_1-of-7 slds-grid slds-grid_vertical dateCell slds-text-heading_small" ondrop={handleDrop} ondragleave={handleDragLeave}
+                                    data-datestring={childItem.dateString} data-datestatus={childItem.status} onclick={dateTileClickHandler} ondragover={handleDragOver} ondragenter={handleDragEnter}> 
+                                    
                                         {childItem.label}
-                                    </div>
+                                    
                                 </div>
                             </template>
                             <template for:each={item.events} for:item="event">
                                 <div key={event.id} title={event.title} data-datestart={event.startDate}
                                     data-description={event.description} data-dateend={event.endDate} data-id={event.id}
-                                    class={event.classesString} style={event.style} onclick={eventClickHandler}>
+                                    class={event.classesString} style={event.style} onclick={eventClickHandler} draggable ondragstart={handleDragStart}>
                                     {event.title}
                                 </div>
                             </template>
