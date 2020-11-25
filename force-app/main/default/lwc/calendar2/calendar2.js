@@ -174,22 +174,17 @@ export default class Calendar2 extends LightningElement {
     }
     renderedCallback() {
         this.reduceOtherDayOpactiy();
-        this.highlightToday();
     }
     handleDragStart(e) {
         this.eventId = e.target.dataset.id;
     }
     handleDrop(e) {
-        e.currentTarget.classList.remove('drag-hover');
+        e.currentTarget.classList.remove("drag-hover");
         if (e.currentTarget.dataset.datestring) {
-            let originEvent;
-            const eventLength = this.eventList.length;
-            for (let i = 0; i < eventLength; i++) {
-                if (this.eventList[i].id === this.eventId) {
-                    originEvent = this.eventList[i];
-                    break;
-                }
-            }
+            let that = this;
+            let originEvent = this.eventList.find((eventItem) => {
+                return eventItem.id === that.eventId;
+            });
             const targetDate = new Date(e.currentTarget.dataset.datestring);
             const dateDiff = this.dayDiff(originEvent.startDate, targetDate);
             let newEvent = {
@@ -211,11 +206,11 @@ export default class Calendar2 extends LightningElement {
     handleDragOver(e) {
         e.preventDefault();
     }
-    handleDragEnter(e){
-        e.currentTarget.classList.add('drag-hover');
+    handleDragEnter(e) {
+        e.currentTarget.classList.add("drag-hover");
     }
-    handleDragLeave(e){
-        e.currentTarget.classList.remove('drag-hover');
+    handleDragLeave(e) {
+        e.currentTarget.classList.remove("drag-hover");
     }
     saveNewEvent() {
         let inputStartDateStatus = JSON.stringify(
@@ -365,13 +360,13 @@ export default class Calendar2 extends LightningElement {
         this.showToast("Success", "Delete Success", "success");
     }
     deleteEventByEventId() {
-        let length = this.eventList.length;
-        for (let i = 0; i < length; i++) {
-            if (this.eventList[i].id === this.eventId) {
-                this.eventList.splice(i, 1);
-                break;
-            }
-        }
+        let that = this;
+        this.eventList.splice(
+            this.eventList.findIndex((eventItem) => {
+                return eventItem.id === that.eventId;
+            }),
+            1
+        );
     }
     refreshCalendar() {
         this.calendarData = [];
@@ -421,21 +416,27 @@ export default class Calendar2 extends LightningElement {
             if (i === 0) {
                 for (k = 1; k <= firstDay; k++) {
                     countP++;
+                    let prevDate = new Date(
+                        prevPageYear,
+                        prevPageMonth,
+                        countP,
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+                    let style =
+                        this.dayDiff(prevDate, new Date()) === 0
+                            ? "background-color: #f0fbff"
+                            : "";
                     itemList.push({
                         value: countP + "",
                         type: "",
                         label: countP + "",
                         index: countP + "",
                         status: "prevMonth",
-                        dateString: new Date(
-                            prevPageYear,
-                            prevPageMonth,
-                            countP,
-                            0,
-                            0,
-                            0,
-                            0
-                        ).toISOString()
+                        style: style,
+                        dateString: prevDate.toISOString()
                     });
                 }
                 k--;
@@ -444,6 +445,19 @@ export default class Calendar2 extends LightningElement {
             }
             for (let j = 0; j < 7 - k; j++) {
                 count++;
+                let nextDate = new Date(
+                    nextPageYear,
+                    nextPageMonth,
+                    countN,
+                    0,
+                    0,
+                    0,
+                    0
+                );
+                let style =
+                    this.dayDiff(nextDate, new Date()) === 0
+                        ? "background-color: #f0fbff"
+                        : "";
                 if (count > totalDay) {
                     countN++;
                     itemList.push({
@@ -452,32 +466,31 @@ export default class Calendar2 extends LightningElement {
                         label: countN + "",
                         index: countN + "",
                         status: "nextMonth",
-                        dateString: new Date(
-                            nextPageYear,
-                            nextPageMonth,
-                            countN,
-                            0,
-                            0,
-                            0,
-                            0
-                        ).toISOString()
+                        style: style,
+                        dateString: nextDate.toISOString()
                     });
                 } else {
+                    let date = new Date(
+                        this.yearNow,
+                        this.monthNow,
+                        count,
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+                    let style =
+                        this.dayDiff(date, new Date()) === 0
+                            ? "background-color: #f0fbff"
+                            : "";
                     itemList.push({
                         value: count + "",
                         type: "",
                         label: count + "",
                         index: count,
                         status: "thisMonth",
-                        dateString: new Date(
-                            this.yearNow,
-                            this.monthNow,
-                            count,
-                            0,
-                            0,
-                            0,
-                            0
-                        ).toISOString()
+                        style: style,
+                        dateString: date.toISOString()
                     });
                 }
             }
@@ -530,13 +543,11 @@ export default class Calendar2 extends LightningElement {
                         itemRows[d][ep.itemRow] = true;
                     }
                 }
-
                 ep.classes.push(`offset${startOffset}`);
                 ep.classes.push(`span${span}`);
-
                 let classesString = "";
-                for (let c = 0; c < ep.classes.length; c++) {
-                    classesString += ep.classes[c] + " ";
+                for (let item of ep.classes) {
+                    classesString += item + " ";
                 }
                 ep.classesString = classesString;
                 let top = this.getItemTop(ep.itemRow);
@@ -585,9 +596,7 @@ export default class Calendar2 extends LightningElement {
     findAndSortItemsInDateRange(startDate, endDate) {
         let events = this.eventList;
         let eventInRangeList = [];
-        let eventLength = events.length;
-        for (let i = 0; i < eventLength; i++) {
-            let item = events[i];
+        for (let item of events) {
             if (
                 new Date(item.endDate) >= startDate &&
                 this.dateOnly(item.startDate) <= endDate
@@ -595,8 +604,7 @@ export default class Calendar2 extends LightningElement {
                 eventInRangeList.push(item);
             }
         }
-        eventInRangeList.sort(this.itemComparer);
-        return eventInRangeList;
+        return eventInRangeList.sort(this.itemComparer);
     }
     addDays(d, days) {
         return new Date(
@@ -613,28 +621,6 @@ export default class Calendar2 extends LightningElement {
         const d2 = new Date(d);
         d2.setHours(0, 0, 0, 0);
         return d2;
-    }
-    /**
-     * @description highlight the tile of today
-     */
-    highlightToday() {
-        let dateString = new Date(
-            this.yearOrigin +
-                "-" +
-                (this.monthOrigin + 1) +
-                "-" +
-                this.dayOrigin
-        ).toLocaleDateString();
-        //to fix a funny bug.
-        let tileList = this.template.querySelectorAll(".dateTile");
-        for (let i = 0; i < tileList.length; i++) {
-            tileList[i].style.backgroundColor = "white";
-        }
-        if (this.template.querySelector(`[data-datestring="${dateString}"]`)) {
-            this.template.querySelector(
-                `[data-datestring="${dateString}"]`
-            ).style.backgroundColor = "#f0fbff";
-        }
     }
     toPrevMonth() {
         this.monthNow--;

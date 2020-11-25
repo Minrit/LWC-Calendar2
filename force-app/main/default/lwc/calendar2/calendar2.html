@@ -53,11 +53,9 @@
                         <div key={item.index} class="slds-col slds-grid calendarCell" >
                             <template for:each={item.items} for:item="childItem">
                                 <div key={childItem.label}
-                                    class="slds-col slds-size_1-of-7 slds-grid slds-grid_vertical dateCell slds-text-heading_small" ondrop={handleDrop} ondragleave={handleDragLeave}
+                                    class="slds-col slds-size_1-of-7 slds-grid slds-grid_vertical dateCell slds-text-heading_small" ondrop={handleDrop} ondragleave={handleDragLeave} style={childItem.style}
                                     data-datestring={childItem.dateString} data-datestatus={childItem.status} onclick={dateTileClickHandler} ondragover={handleDragOver} ondragenter={handleDragEnter}> 
-                                    
                                         {childItem.label}
-                                    
                                 </div>
                             </template>
                             <template for:each={item.events} for:item="event">
